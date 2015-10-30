@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Lecture 05 &mdash; Data Engineering &mdash; Spring 2015</title>
+
+		<meta name="description" content="Lecture 05 for Ken Anderson's Spring 2015 Seminar on Data Engineering">
+		<meta name="author" content="Ken Anderson">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h2>Node.js</h2>
+					<h4>Lecture 05 &mdash; Data Engineering &mdash; Spring 2015</h4>
+          <p>January 27, 2015</p>
+				</section>
+
+				<section>
+					<h2>Hello World in Node.js</h2>
+					<pre><code data-trim contenteditable>
+var http = require('http');
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+}).listen(1337, '127.0.0.1');
+console.log('Server running at http://127.0.0.1:1337/');
+					</code></pre>
+					<p>Taken from the <a href="http://nodejs.org/">Node.js Home Page</a></p>
+				</section>
+
+				<section>
+					<h2>Explanation (1)</h2>
+					<pre><code data-trim contenteditable>
+var http = require('http');
+					</code></pre>
+          <ul>
+            <li>Most code in node is packaged inside of a module</li>
+            <li><strong>http</strong> is a core module, provided by Node.js itself</li>
+            <li>The <strong>require</strong> function will look for modules in a variety of locations
+              <ul>
+                <li>built-in modules</li>
+                <li>globally-installed modules</li>
+                <li>project-specific modules</li>
+              </ul>
+            </li>
+          </ul>
+				</section>
+
+				<section>
+					<h2>Explanation (2)</h2>
+					<pre><code data-trim contenteditable>
+http.createServer(&lt;function&gt;).listen(1337, '127.0.0.1');
+					</code></pre>
+          <ul>
+						<li><strong>http</strong> provides a function called <strong>createServer()</strong></li>
+						<li>It takes a function that implements the server's behavior</li>
+						<li><strong>createServer()</strong> returns an object with a method <strong>listen()</strong>
+              <ul>
+                <li>It accepts the server's network interface and port</li>
+                <li>It also starts the server running</li>
+              </ul>
+            </li>
+          </ul>
+				</section>
+
+				<section>
+					<h2>Explanation (3)</h2>
+					<pre><code data-trim contenteditable>
+function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+}
+					</code></pre>
+					<ul>
+						<li>This is the <em>anonymous</em> function passed to <strong>createServer()</strong>.</li>
+						<li>Each time the server receives a request
+							<ul>
+								<li>It invokes this function and passes the HTTP request and response objects</li>
+							</ul>
+						</li>
+						<li>This particular function ignores all input and generates a simple HTTP response.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Explanation (4)</h2>
+					<pre><code data-trim contenteditable>
+console.log('Server running at http://127.0.0.1:1337/');
+					</code></pre>
+					<ul>
+						<li><strong>console.log()</strong> is the <strong>printf()</strong> of the Javascript world.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Explanation (5)</h2>
+					<p>Our program in abstract form</p>
+					<pre><code data-trim contenteditable>
+1. Get the http module.
+2. Create a server; register a function; start a server.
+3. Print out a message.
+					</code></pre>
+					<ul>
+						<li>All of this is executed immediately when passed to <strong>node</strong></li>
+						<li>If no future work remained, <strong>node</strong> would shut down.</li>
+						<li>This particular program, however, will run forever
+							<ul>
+								<li>because the HTTP server has set up an event to check for new requests on every cycle of the event loop</li>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Event Loop?</h2>
+					<ul>
+						<li>In order to understand Node.js, you need to understand the <em>event loop</em></li>
+						<li>Event-based programming is a programming style where the code you write is not in control
+							<ul>
+								<li>Instead, you write code that says (essentially)<br>"When event x happens, do this"</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Event Loop (1)</h2>
+					<p>The basic structure of all Node.js programs</p>
+					<pre><code data-trim contenteditable>
+while (there are events to be handled) {
+	handle event
+}
+					</code></pre>
+					<p>This is how GUI programs are written.</p>
+					<p>"If user click here, do this."</p>
+				</section>
+
+				<section>
+					<h2>Event Loop (2)</h2>
+					<ul>
+						<li>Node tries to make it easy to <a href="http://nodejs.org/api/timers.html">add work to the event queue</a></li>
+						<li>Libraries like <strong>http</strong> take functions and add them to the queue on your behalf (as we saw with <strong>createServer()</strong>).</li>
+						<li>Node also lets you add functions to the event queue for later execution.
+							<ul>
+								<li>process.nextTick()</li>
+								<li>setImmediate()</li>
+								<li>setTimeout()</li>
+								<li>setInterval()</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Event Loop (3) &mdash; process.nextTick()</h2>
+					<p>A simple example using process.nextTick()</p>
+					<pre><code data-trim contenteditable>
+console.log("first!");
+process.nextTick(function() {
+  console.log("third!");
+});
+console.log("second!");
+					</code></pre>
+					<ul>
+						<li>Our main program is simply a function passed to the event loop</li>
+						<li>On the first pass: log(), nextTick(), log()</li>
+						<li>On the second pass: log()</li>
+						<li>Since there are no more events, the program ends.</li>
+					<ul>
+				</section>
+
+				<section>
+					<h2>Event Loop (4)</h2>
+					<ul>
+						<li>Our program would behave the same if you replaced process.nextTick() with setImmediate()</li>
+						<li>They both schedule a function for the next iteration of the event loop.
+							<ul>
+								<li>The difference is that setImmediate() allows IO-related callbacks to process first.</li>
+								<li>process.nextTick() will prioritize your function before IO-related callbacks, possibly causing IO starvation</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Event Loop (5)</h2>
+					<ul>
+						<li>setTimeout() takes a second parameter that specifies how long to wait before the function is executed.</li>
+						<li>setInterval() take a second parameter that specifies the interval at which this function should be executed.
+							<ul>
+								<li>If the interval is never turned off, the node program will execute "forever".</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Callback Hell (1)</h2>
+					<p>Callbacks are great for asynchronous programming, but...</p>
+					<p>It can lead to <em>callback hell</em>, where callbacks get indented</p>
+				  <p><a href="images/callBackHell.png"><img height="518" src="images/callBackHell.png"></a></p>
+				</section>
+
+				<section>
+					<h2>Callback Hell (2)</h2>
+					<p>Here the callbacks have been highlighted...</p>
+				  <p><a href="images/callBacksHighlighted.png"><img height="518" src="images/callBacksHighlighted.png"></a></p>
+				</section>
+
+				<section>
+					<h2>Callback Hell (3)</h2>
+					<ul>
+						<li>The problem occurs when you have to chain multiple asynchronous calls together</li>
+						<li>Each call in the chain has to be in a callback on the previous function
+							<ul>
+								<li>because you have to wait for the previous call to finish</li>
+								<li>before you proceed</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Callback Hell (4)</h2>
+					<ul>
+						<li>Two ways to solve this problem:
+							<ul>
+								<li>Use synchronous functions instead
+									<ul>
+										<li>frowned upon by the Node community</li>
+									</ul>
+								</li>
+								<li>Use named callback functions
+									<ul>
+										<li>Define your functions individually</li>
+										<li>Then refer to them by name in the code that requires a callback</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Callback Hell (5)</h2>
+					<p>Fixing with Named Callbacks</p>
+				  <p><a href="images/namedCallbacks.png"><img height="518" src="images/namedCallbacks.png"></a></p>
+				</section>
+
+				<section>
+					<h2>Callback Hell (6)</h2>
+					<p>Here the callbacks have been highlighted...</p>
+				  <p><a href="images/namedCallbacksHighlighted.png"><img height="518" src="images/namedCallbacksHighlighted.png"></a></p>
+				</section>
+
+				<section>
+					<h2>Just Callbacks?</h2>
+					<ul>
+						<li>Are callbacks the only asynchronous mechanism in Node?</li>
+						<li>No!
+							<ul>
+								<li>Event Emitters</li>
+								<li>Promises</li>
+							</ul>
+						</li>
+						<li>We'll discuss these concepts next week</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Node Execution Model (1)</h2>
+					<ul>
+						<li>For user-written code, Node is single threaded!</li>
+						<li>Any code that you write is guaranteed to be synchronous</li>
+						<li>You do not have to worry about race conditions</li>
+						<li>IO is handled in parallel.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Node Execution Model (2)</h2>
+					<ul>
+						<li>If you issue an asyncrhonous call for IO
+							<ul>
+								<li>Your callback is registered</li>
+								<li>The IO call is executed in a separate thread
+									<ul>
+										<li>Since it's an IO call, it immediately blocks</li>
+									</ul>
+								</li>
+								<li>Other events on the event loop are handled as normal</li>
+								<li>At some point, the IO completes and your callback is invoked
+									<ul>
+										<li>Invoked via setImmediate() or process.nextTick()</li>
+										<li>So, even then, your code executes in a single thread</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Node Execution Model (3)</h2>
+					<ul>
+						<li>This model makes it very easy to implement services that run server-side.</li>
+						<li>You are guaranteed that only one method of your service is running at any one time.</li>
+						<li>You are now in a position to understand the Javascript implementation of the Contacts web service</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Hands-On Demo</h2>
+					<ul>
+						<li>Let's try a few things in class together</li>
+						<li>Does everyone have Node installed?</li>
+					</ul>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
