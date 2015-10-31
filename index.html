@@ -180,13 +180,34 @@ create 'emp', 'personal data', ’professional data’
             </li>
             <li>Result
             <ul>
-            <a href="images/Create Table.png"><img height="120" src="images/Create Table.png"></a>
+            <a href="images/Create Table.png"><img height="120" width="480" src="images/Create Table.png"></a>
             </ul>
             </li>
-            <li>Another option: create a table using java API: using createTable() method of HBaseAdmin class</li>
+            <li>Or: create a table using java API: using createTable() method of HBaseAdmin class</li>
           </ul>
 				</section>
 
+				<section>
+					<h2>List table</h2>
+         <ul>
+            <li>list</li>
+            <li>Or: listing tables using java API
+              <ul>
+                <li>Step1</li>
+                <pre><code data-trim contenteditable>
+//creating a configuration object
+Configuration conf = HBaseConfiguration.create();
+
+//Creating HBaseAdmin object
+HBaseAdmin admin = new HBaseAdmin(conf);
+
+//Getting all the list of tables using HBaseAdmin object
+HTableDescriptor[] tableDescriptor = admin.listTables(); 
+			</code></pre>
+              </ul>
+            </li>
+          </ul>
+				</section>
 
 
 			</div>
