@@ -192,18 +192,9 @@ create 'emp', 'personal data', ’professional data’
          <ul>
             <li>list</li>
             <li>Or: listing tables using java API
-              <ul>
-                <li>Step1</li>
-                <pre><code data-trim contenteditable>
-//creating a configuration object
-Configuration conf = HBaseConfiguration.create();
-
-//Creating HBaseAdmin object
-HBaseAdmin admin = new HBaseAdmin(conf);
-
-//Getting all the list of tables using HBaseAdmin object
-HTableDescriptor[] tableDescriptor = admin.listTables(); 
-			</code></pre>
+              <ul> 
+                <li>Step 1: A method called listTables() in the class HBaseAdmin to get the list of all the tables in HBase. This method returns an array of HTableDescriptor objects</li>
+                <li>Step 2: Get the length of the HTableDescriptor[] array using the length variable of the HTableDescriptor class. Get the name of the tables from this object using getNameAsString() method. Run the ‘for’ loop using these and get the list of the tables in HBase.</li>
               </ul>
             </li>
           </ul>
@@ -213,13 +204,12 @@ HTableDescriptor[] tableDescriptor = admin.listTables();
 					<h2>List table(2)</h2>
          <ul>
             <li>listing tables using java API
-              <ul>
-                <li>Step2</li>
-                <a href="images/ListTable.png"><img height="420" width="650" src="images/ListTable.png"></a>
-              </ul>
+            <a href="images/ListTable.png"><img height="420" width="650" src="images/ListTable.png"></a>
             </li>
           </ul>
 				</section>
+
+
 
 
 			</div>
