@@ -111,6 +111,17 @@
           </ul>
 				</section>
 
+				<section>
+					<h2>Architecture</h2>
+          <ul>
+            <li>In HBase, tables are split into regions and are served by the region servers</li>
+			<li>Regions are vertically divided by column families into “Stores”</li>
+			<li>Stores are saved as files in HDFS</li>
+			<li>Data storage will be in the form of regions (tables)</li>
+			<li>These regions will be split up and stored in region servers</li>
+          </ul>
+				</section>
+
 			</div>
 
 		</div>
