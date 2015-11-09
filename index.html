@@ -340,6 +340,62 @@ create 'emp', 'personal data', ’professional data’
           </ul>
 				</section>
 
+        <section>
+          <h2>Shutting Down</h2>
+         <ul>
+            <li>Exit: exit the shell by typing the exit command</li>
+            <li>Stop HBase: ./bin/stop-hbase.sh</li>
+            <li>Stop HBase using java API
+              <ul> 
+                <li>Step 1: Instantiate HBaseAdmin class</li>
+                <li>Step 2: Shut down the HBase using the shutdown() method</li>
+                  <ul>
+                <a href="images/ShutDown.png"><img height="300" width="550" src="images/ShutDown.png"></a>   
+                </ul>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Insert data</h2>
+         <ul>
+            <li>How to create data in HBase table?
+                <ul>
+                    <li>put command</li>
+                    <li>add() method of Put class</li>
+                    <li>put() method of HTable class</li>
+                </ul>
+            </li>
+            <li>Example
+                <ul>
+                    <li>Using put command:</li>
+                    <pre><code data-trim contenteditable>
+put 'emp','1','personal data:name','raju' 
+                    </code></pre>
+                     <a href="images/put.png"><img height="200" width="500" src="images/put.png"></a>   
+                </ul>
+            </li>
+         </ul>
+        </section>
+
+        <section>
+          <h2>Update data</h2>
+         <ul>
+            <li>How to update data in HBase table?
+                <ul>
+                    <li>put command</li>
+                    <li>Example:
+                    <pre><code data-trim contenteditable>
+put ‘table name’,’row ’,'Column family:column name',’new value’
+put 'emp','row1','personal:city','Delhi'
+                    </code></pre>
+                    </li>
+                </ul>
+         </ul>
+        </section>
+
+
 
 			</div>
 
