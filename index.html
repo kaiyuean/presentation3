@@ -395,6 +395,116 @@ put 'emp','row1','personal:city','Delhi'
          </ul>
         </section>
 
+         <section>
+          <h2>Read data</h2>
+         <ul>
+            <li>How to read data in HBase table?
+                <ul>
+                    <li>get command</li>
+                    <li>Example:
+                    <pre><code data-trim contenteditable>
+get ‘table name’,’row’
+get 'emp','row1'
+                    </code></pre>
+                    </li>
+                </ul>
+         </ul>
+        </section>
+
+        <section>
+          <h2>Delete data</h2>
+         <ul>
+            <li>How to delete a specific cell in HBase table?
+                <ul>
+                    <li>delete command</li>
+                    <li>Example:
+                    <pre><code data-trim contenteditable>
+delete ‘table name’,’row’,'Column family:column name'
+delete 'emp','1','personal data:city'
+                    </code></pre>
+                    </li>
+                </ul>
+         </ul>
+        </section>
+
+        <section>
+          <h2>Scan data</h2>
+         <ul>
+            <li>How to view the data in HBase table?
+                <ul>
+                    <li>scan command</li>
+                    <li>Example:
+                    <pre><code data-trim contenteditable>
+scan ‘table name’
+scan 'emp'
+                    </code></pre>
+                    </li>
+                </ul>
+         </ul>
+        </section>
+        
+        <section>
+          <h2>Count & truncate</h2>
+         <ul>
+            <li>How to count the number of rows in HBase table?
+                <ul>
+                    <li>count command</li>
+                    <li>Example:
+                    <pre><code data-trim contenteditable>
+count ‘table name’
+count 'emp'
+                    </code></pre>
+                    </li>
+                </ul>
+            </li>
+             <li>How to disables drops and recreates a table?
+                <ul>
+                    <li>truncate command</li>
+                    <li>Example:
+                    <pre><code data-trim contenteditable>
+truncate ‘table name’
+truncate 'emp'
+                    </code></pre>
+                    </li>
+                </ul>
+            </li>
+         </ul>
+        </section>
+
+         <section>
+          <h2>Security</h2>
+         <ul>
+            <li>Grant: grants specific rights such as read, write, execute, and admin on a table to a certain user</li>
+            <pre><code data-trim contenteditable>
+grant 'user','permissions'
+grant 'kaiyuean', 'RWXCA'
+                    </code></pre>
+            <li>Revoke: used to revoke a user's access rights of a table.</li>
+            <pre><code data-trim contenteditable>
+revoke 'user'
+revoke 'kaiyuean'
+                    </code></pre>
+            <li>User_permission: used to list all the permissions for a particular table</li>
+            <pre><code data-trim contenteditable>
+user_permission ‘tablename’
+user_permission 'emp'
+                    </code></pre> 
+         </ul>
+        </section>
+
+         <section>
+          <h2>References</h2>
+         <ul>
+            <li>https://hbase.apache.org/</li>
+            <li>http://hortonworks.com/hadoop/hbase/</li>
+            <li>https://azure.microsoft.com/en-us/documentation/articles/hdinsight-hbase-tutorial-get-started/</li>
+            <li>http://www.tutorialspoint.com/hbase/index.htm</li>
+         </ul>
+        </section>
+
+         <section>
+          <h2>Thank you!</h2>
+        </section>
 
 
 			</div>
