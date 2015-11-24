@@ -21,3 +21,13 @@ HBase is a data model that is similar to Google’s big table designed to provid
 It is a part of the Hadoop ecosystem that provides random real-time read/write access to data in the Hadoop File System.
 
 One can store the data in HDFS either directly or through HBase. Data consumer reads/accesses the data in HDFS randomly using HBase. HBase sits on top of the Hadoop File System and provides read and write access.
+
+## References
+
+https://hbase.apache.org/
+
+http://hortonworks.com/hadoop/hbase/
+
+https://azure.microsoft.com/en-us/documentation/articles/hdinsight-hbase-tutorial-get-started/
+
+http://www.tutorialspoint.com/hbase/index.htm
